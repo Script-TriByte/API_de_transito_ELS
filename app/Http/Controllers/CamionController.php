@@ -16,6 +16,30 @@ class CamionController extends Controller
         DB::raw('LOCK TABLE vehiculo_lote_destino READ');
     }
 
+    public function IniciarTransaccion()
+    {
+        $this->BloquearTablasASoloLectura();
+        DB::beginTransaction();
+    }
+
+    public function FinalizarTransaccion()
+    {
+        DB::commit();
+        DB::raw('UNLOCK TABLES');
+    }
+
+    public function ObtenerLotes($documentoDeIdentidad)
+    {
+        $lotes = VehiculoLoteDestino::join('lotes', function($join) use ($documentoDeIdentidad){
+            $join->on('vehiculo_lote_destino.idLote', '=', 'lotes.idLote')
+                 ->where('vehiculo_lote_destino.docDeIdentidad', '=', $documentoDeIdentidad);
+        })
+        ->select('lotes.*')
+        ->get();
+
+        return $lotes;
+    }
+
     public function IndicarLotes(Request $request, $documentoDeIdentidad)
     {
         $validation = Validator::make(['documentoDeIdentidad' => $documentoDeIdentidad],[
@@ -25,22 +49,12 @@ class CamionController extends Controller
         if($validation->fails())
             return response($validation->errors(), 401);
 
-        $this->BloquearTablasASoloLectura();
-        DB::beginTransaction();
+        $this->IniciarTransaccion();
 
-        $lotes = VehiculoLoteDestino::join('lotes', function($join) use ($documentoDeIdentidad){
-            $join->on('vehiculo_lote_destino.idLote', '=', 'lotes.idLote')
-                 ->where('vehiculo_lote_destino.docDeIdentidad', '=', $documentoDeIdentidad);
-        })
-        ->select('lotes.*')
-        ->get();
+        $lotes = $this->ObtenerLotes($documentoDeIdentidad);
 
-        DB::commit();
-        DB::raw('UNLOCK TABLES');
+        $this->FinalizarTransaccion();
 
-        if(count($lotes) == 0)
-            return ["mensaje" => "No cuentas con lotes asignados."];
-
-        return json_encode($lotes);
+        return $lotes;
     }
 }
