@@ -25,3 +25,34 @@ Route::prefix('v2')->group(function ()
         [CamionController::class, "IndicarLotes"]
     );
 });
+
+Route::prefix('v3')->group(function ()
+{
+    Route::post("/entrega/{idLote}",
+        [LoteController::class, "ConfirmarEntrega"]
+    );
+
+    Route::get("/contenidos/{documentoDeIdentidad}",
+        [CamionController::class, "IndicarLotes"]
+    );
+
+    Route::get("/paquetes",
+        [PaqueteController::class, "ListarTodos"]
+    );
+
+    Route::get("/tiempo/{idPaquete}",
+        [PaqueteController::class, "ObtenerHoraEstimadaDeLlegada"]
+    );
+
+    Route::get("/destinos/{idPaquete}",
+        [PaqueteController::class, "ObtenerDestinoAsignado"]
+    );
+
+    Route::get("/lotes/{idPaquete}",
+        [PaqueteController::class, "ObtenerInformacionDeLote"]
+    );
+
+    Route::get("/articulos/{idPaquete}",
+        [PaqueteController::class, "ObtenerInformacionDeArticulo"]
+    );
+});
