@@ -16,6 +16,30 @@ class LoteController extends Controller
         DB::raw('LOCK TABLE estadoEntrega WRITE');
     }
 
+    public function IniciarTransaccion()
+    {
+        $this->BloquearTablaEstadoEntrega();
+        DB::beginTransaction();
+    }
+
+    public function FinalizarTransaccion()
+    {
+        DB::commit();
+        DB::raw('UNLOCK TABLES');
+    }
+
+    public function CrearEstadoEntrega($idLote)
+    {
+        $fechaDeEntrega = date('Y-m-d');
+        $horaDeEntrega = date('H:i:s');
+
+        EstadoEntrega::create([
+            'idLote' => $idLote,
+            'fechaEntrega' => $fechaDeEntrega,
+            'horaEntrega' => $horaDeEntrega
+        ]);
+    }
+
     public function ConfirmarEntrega(Request $request, $idLote)
     {
         $validation = Validator::make(['idLote' => $idLote],[
@@ -27,20 +51,11 @@ class LoteController extends Controller
 
         Lote::findOrFail($idLote);
 
-        $fechaDeEntrega = date('Y-m-d');
-        $horaDeEntrega = date('H:i:s');
+        $this->IniciarTransaccion();
 
-        $this->BloquearTablaEstadoEntrega();
-        DB::beginTransaction();
+        $this->CrearEstadoEntrega($idLote);
 
-        EstadoEntrega::create([
-            'idLote' => $idLote,
-            'fechaEntrega' => $fechaDeEntrega,
-            'horaEntrega' => $horaDeEntrega
-        ]);
-
-        DB::commit();
-        DB::raw('UNLOCK TABLES');
+        $this->FinalizarTransaccion();
 
         return [ "mensaje" => "Se ha entregado el lote correctamente."];
     }
