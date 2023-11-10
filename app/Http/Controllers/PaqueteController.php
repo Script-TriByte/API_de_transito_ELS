@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Models\PaqueteLote;
 use App\Models\Lote;
@@ -37,15 +39,20 @@ class PaqueteController extends Controller
 
     public function ListarTodos()
     {
-        $this->IniciarTransaccion();
+        try {
+            $this->IniciarTransaccion();
 
-        $paquetes = PaqueteLote::join('paquetes', 'paquete_lote.idPaquete', '=', 'paquetes.idPaquete')
-        ->select('paquetes.*')
-        ->get();
+            $paquetes = PaqueteLote::join('paquetes', 'paquete_lote.idPaquete', '=', 'paquetes.idPaquete')
+            ->select('paquetes.*')
+            ->get();
 
-        $this->FinalizarTransaccion();
+            $this->FinalizarTransaccion();
 
-        return $paquetes;
+            return $paquetes;
+        }
+        catch (QueryException $e) {
+            return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde" ];
+        }
     }
 
     public function CalcularTiempoDeLlegada($horaEstimadaDeLlegada)
@@ -58,38 +65,74 @@ class PaqueteController extends Controller
 
     public function ObtenerHoraEstimadaDeLlegada(Request $request, $idPaquete)
     {
-        $informacionDeLote = $this->ObtenerInformacionDeLote();
-        $idLote = $informacionDeLote->idLote;
-        $loteSiendoTransportado = VehiculoLoteDestino::findOfFail($idLote);
-        $horaEstimadaDeLlegada = Carbon::parse($loteSiendoTransportado->horaEstimada);
+        try {
+            $informacionDeLote = $this->ObtenerInformacionDeLote();
+            $idLote = $informacionDeLote->idLote;
+            $loteSiendoTransportado = VehiculoLoteDestino::findOfFail($idLote);
+            $horaEstimadaDeLlegada = Carbon::parse($loteSiendoTransportado->horaEstimada);
 
-        return $this->CalcularTiempoDeLlegada($horaEstimadaDeLlegada);
+            return $this->CalcularTiempoDeLlegada($horaEstimadaDeLlegada);
+        }
+        catch (ModelNotFoundException $e)
+        {
+            return [ "mensaje" => "Paquete en curso inexistente." ];
+        }
+        catch (QueryException $e) {
+            return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde" ];
+        }
     }
 
     public function ObtenerDestinoAsignado(Request $request, $idPaquete)
     {
-        $informacionDeLote = $this->ObtenerInformacionDeLote();
-        $idDestino = $informacionDeLote->idDestino;
-        $informacionDeDestino = Destino::findOrFail($idDestino);
+        try {
+            $informacionDeLote = $this->ObtenerInformacionDeLote();
+            $idDestino = $informacionDeLote->idDestino;
+            $informacionDeDestino = Destino::findOrFail($idDestino);
 
-        return $informacionDeDestino->nombre; 
+            return $informacionDeDestino->nombre; 
+        }
+        catch (ModelNotFoundException $e)
+        {
+            return [ "mensaje" => "Paquete inexistente." ];
+        }
+        catch (QueryException $e) {
+            return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde" ];
+        }    
     }
 
     public function ObtenerInformacionDeLote($idPaquete)
     {
-        $loteRelacionado = PaqueteLote::findOrFail($idPaquete);
-        $idLote = $loteRelacionado->idLote;
-        $informacionDeLote = Lote::findOrFail($idLote);
+        try {
+            $loteRelacionado = PaqueteLote::findOrFail($idPaquete);
+            $idLote = $loteRelacionado->idLote;
+            $informacionDeLote = Lote::findOrFail($idLote);
 
-        return $informacionDeLote;
+            return $informacionDeLote;
+        }
+        catch (ModelNotFoundException $e)
+        {
+            return [ "mensaje" => "Paquete inexistente." ];
+        }
+        catch (QueryException $e) {
+            return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde" ];
+        }
     }
 
     public function ObtenerInformacionDeArticulo(Request $request, $idPaquete)
     {
-        $articuloRelacionado = ArticuloPaquete::where('idPaquete', $idPaquete)->first();
-        $idArticulo = $articuloRelacionado->idArticulo;
-        $informacionDeArticulo = Articulo::findOrFail($idArticulo);
+        try {
+            $articuloRelacionado = ArticuloPaquete::where('idPaquete', $idPaquete)->firstOrFail();
+            $idArticulo = $articuloRelacionado->idArticulo;
+            $informacionDeArticulo = Articulo::findOrFail($idArticulo);
 
-        return $informacionDeArticulo;
+            return $informacionDeArticulo;
+        }
+        catch (ModelNotFoundException $e)
+        {
+            return [ "mensaje" => "Paquete inexistente." ];
+        }
+        catch (QueryException $e) {
+            return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde" ];
+        }
     }
 }
