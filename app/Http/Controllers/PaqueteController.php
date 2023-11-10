@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\PaqueteLote;
 use App\Models\Lote;
+use App\Models\Articulo;
+use App\Models\ArticuloPaquete;
+use App\Models\VehiculoLoteDestino;
+use App\Models\Destino;
+
 
 class PaqueteController extends Controller
 {
@@ -39,43 +45,51 @@ class PaqueteController extends Controller
 
         $this->FinalizarTransaccion();
 
-        if($paquetes == null)
-            return ["mensaje" => "No hay paquetes en envio."];
-
-        return json_encode($paquetes);
+        return $paquetes;
     }
 
-    public function CalcularTiempoDeLlegada(Request $request, $idPaquete)
+    public function CalcularTiempoDeLlegada($horaEstimadaDeLlegada)
+    {
+        $horaActual = Carbon::now();
+        $diferenciaDeTiempo = $horaEstimadaDeLlegada->diffForHumans($horaActual);
+
+        return $diferenciaDeTiempo();
+    }
+
+    public function ObtenerHoraEstimadaDeLlegada(Request $request, $idPaquete)
     {
         $informacionDeLote = $this->ObtenerInformacionDeLote();
         $idLote = $informacionDeLote->idLote;
         $loteSiendoTransportado = VehiculoLoteDestino::findOfFail($idLote);
+        $horaEstimadaDeLlegada = Carbon::parse($loteSiendoTransportado->horaEstimada);
 
-        $horaEstimadaDeLlegada = $loteSiendoTransportado->horaEstimada;
-
-        
+        return $this->CalcularTiempoDeLlegada($horaEstimadaDeLlegada);
     }
 
     public function ObtenerDestinoAsignado(Request $request, $idPaquete)
     {
         $informacionDeLote = $this->ObtenerInformacionDeLote();
-        $destinoDeLote = $informacionDeLote->idDestino;
-        $informacionDestino = Destino::where('idDestino', $destinoDeLote)->first();
+        $idDestino = $informacionDeLote->idDestino;
+        $informacionDeDestino = Destino::findOrFail($idDestino);
 
-        return $informacionDestino->nombre; 
+        return $informacionDeDestino->nombre; 
     }
 
     public function ObtenerInformacionDeLote($idPaquete)
     {
         $loteRelacionado = PaqueteLote::findOrFail($idPaquete);
         $idLote = $loteRelacionado->idLote;
-        $informacionDeLote = Lote::where('idLote', $idLote)->first();
+        $informacionDeLote = Lote::findOrFail($idLote);
 
         return $informacionDeLote;
     }
 
     public function ObtenerInformacionDeArticulo(Request $request, $idPaquete)
     {
+        $articuloRelacionado = ArticuloPaquete::where('idPaquete', $idPaquete)->first();
+        $idArticulo = $articuloRelacionado->idArticulo;
+        $informacionDeArticulo = Articulo::findOrFail($idArticulo);
 
+        return $informacionDeArticulo;
     }
 }
