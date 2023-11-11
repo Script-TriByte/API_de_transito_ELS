@@ -30,31 +30,44 @@ class CamionController extends Controller
 
     public function ObtenerLotes($documentoDeIdentidad)
     {
-        $lotes = VehiculoLoteDestino::join('lotes', function($join) use ($documentoDeIdentidad){
-            $join->on('vehiculo_lote_destino.idLote', '=', 'lotes.idLote')
-                 ->where('vehiculo_lote_destino.docDeIdentidad', '=', $documentoDeIdentidad);
-        })
-        ->select('lotes.*')
-        ->get();
-
-        return $lotes;
+        try {
+            $lotes = VehiculoLoteDestino::join('lotes', function($join) use ($documentoDeIdentidad){
+                $join->on('vehiculo_lote_destino.idLote', '=', 'lotes.idLote')
+                     ->where('vehiculo_lote_destino.docDeIdentidad', '=', $documentoDeIdentidad);
+            })
+            ->select('lotes.*')
+            ->get();
+    
+            return $lotes;
+        }
+        catch (QueryException $e) {
+            return [ "mensaje" => "No se ha podido conectar a la base de datos. Intentelo mas tarde." ];
+        }
     }
 
     public function IndicarLotes(Request $request, $documentoDeIdentidad)
     {
-        $validation = Validator::make(['documentoDeIdentidad' => $documentoDeIdentidad],[
-            'documentoDeIdentidad' => 'required|numeric|digits:8',
-        ]);
-
-        if($validation->fails())
-            return response($validation->errors(), 401);
-
-        $this->IniciarTransaccion();
-
-        $lotes = $this->ObtenerLotes($documentoDeIdentidad);
-
-        $this->FinalizarTransaccion();
-
-        return $lotes;
+        try {
+            $validation = Validator::make(['documentoDeIdentidad' => $documentoDeIdentidad],[
+                'documentoDeIdentidad' => 'required|numeric|digits:8',
+            ]);
+    
+            if($validation->fails())
+                throw new ValidationException($validation);
+    
+            $this->IniciarTransaccion();
+    
+            $lotes = $this->ObtenerLotes($documentoDeIdentidad);
+    
+            $this->FinalizarTransaccion();
+    
+            return $lotes;
+        }
+        catch (ValidationException $e) {
+            return response($e->validator->errors(), 401);
+        }
+        catch (QueryException $e) {
+            return [ "mensaje" => "No se ha podido conectar a la base de datos. Intentelo mas tarde." ];
+        }
     }
 }
