@@ -75,7 +75,7 @@ class PaqueteController extends Controller
         }
         catch (ModelNotFoundException $e)
         {
-            return [ "mensaje" => "Paquete en curso inexistente." ];
+            return response([ "mensaje" => "Paquete en curso inexistente." ], 404);
         }
         catch (QueryException $e) {
             return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde" ];
@@ -93,7 +93,7 @@ class PaqueteController extends Controller
         }
         catch (ModelNotFoundException $e)
         {
-            return [ "mensaje" => "Paquete inexistente." ];
+            return response([ "mensaje" => "Paquete inexistente." ], 404);
         }
         catch (QueryException $e) {
             return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde" ];
@@ -111,7 +111,7 @@ class PaqueteController extends Controller
         }
         catch (ModelNotFoundException $e)
         {
-            return [ "mensaje" => "Paquete inexistente." ];
+            return response([ "mensaje" => "Paquete inexistente." ], 404);
         }
         catch (QueryException $e) {
             return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde" ];
@@ -129,7 +129,7 @@ class PaqueteController extends Controller
         }
         catch (ModelNotFoundException $e)
         {
-            return [ "mensaje" => "Paquete inexistente." ];
+            return response([ "mensaje" => "Paquete inexistente." ], 404);
         }
         catch (QueryException $e) {
             return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde" ];
