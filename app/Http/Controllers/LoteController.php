@@ -62,7 +62,7 @@ class LoteController extends Controller
             ]);
     
             if($validation->fails())
-                return response($validation->errors(), 401);
+                throw new ValidationException($validation);
     
             $loteAEntregar = VehiculoLoteDestino::findOrFail($idLote);
 
@@ -84,6 +84,9 @@ class LoteController extends Controller
         }
         catch (ModelNotFoundException $e){
             return response([ "mensaje" => "Lote inexistente." ], 404);
+        }
+        catch (ValidationException $e){
+            return response($e->validator->errors(), 401);
         }
     }
 }
