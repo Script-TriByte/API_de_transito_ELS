@@ -46,17 +46,27 @@ class LoteController extends Controller
         }
     }
 
-    public function ConfirmarEntrega(Request $request, $idLote)
+    public function IdentificarQueElLoteLePertenezca($loteAEntregar, $documentoDeIdentidad)
+    {
+        $choferAsignado = $loteAEntregar->docDeIdentidad;
+        if ($choferAsignado != $documentoDeIdentidad)
+            throw new \Exception('El lote a confirmar no se encuentra asignado a su camion.', 401);
+    }
+
+    public function ConfirmarEntrega(Request $request, $idLote, $documentoDeIdentidad)
     {
         try {
-            $validation = Validator::make(['idLote' => $idLote],[
+            $validation = Validator::make(['idLote' => $idLote, 'documentoDeIdentidad' => $documentoDeIdentidad],[
                 'idLote' => 'required|numeric',
+                'documentoDeIdentidad' => 'required|numeric|digits:8'
             ]);
     
             if($validation->fails())
                 return response($validation->errors(), 401);
     
-            VehiculoLoteDestino::findOrFail($idLote);
+            $loteAEntregar = VehiculoLoteDestino::findOrFail($idLote);
+
+            $this->IdentificarQueElLoteLePertenezca($loteAEntregar, $documentoDeIdentidad);
     
             $this->IniciarTransaccion();
     
@@ -66,11 +76,14 @@ class LoteController extends Controller
     
             return [ "mensaje" => "Se ha entregado el lote correctamente."];
         }
+        catch (\Exception $e){
+            return [ "mensaje" => $e->getMessage() ];
+        }
         catch (QueryException $e) {
             return [ "mensaje" => "No se ha podido conectar a la base de datos, intentelo mas tarde." ];
         }
         catch (ModelNotFoundException $e){
-            return [ "mensaje" => "Lote inexistente." ];
+            return response([ "mensaje" => "Lote inexistente." ], 404);
         }
     }
 }
