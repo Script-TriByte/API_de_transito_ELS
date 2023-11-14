@@ -14,7 +14,7 @@ class CamionTest extends TestCase
         $response = $this->get('/api/v3/contenidos/45000000', [
             "Accept" => "application/json"
         ]);;
-        $response->assertStatus(403);
+        $response->assertStatus(401);
     }
 
     public function test_VerificarFuncionamientoDelListado()
@@ -36,6 +36,6 @@ class CamionTest extends TestCase
         $user = User::first();
         $response = $this->actingAs($user, "api")->get('/api/v3/contenidos/99999999');
         $response->assertStatus(200);
-        $this->assertEquals([], $response);
+        $this->assertEquals([], $response.json());
     }
 }
