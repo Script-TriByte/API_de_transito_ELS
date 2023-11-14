@@ -36,6 +36,6 @@ class CamionTest extends TestCase
         $user = User::first();
         $response = $this->actingAs($user, "api")->get('/api/v3/contenidos/99999999');
         $response->assertStatus(200);
-        $this->assertNull($response->json());
+        $this->assertEquals([], $response->json());
     }
 }
