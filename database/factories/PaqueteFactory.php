@@ -14,6 +14,7 @@ class PaqueteFactory extends Factory
     public function definition()
     {
         return [
+            'idPaquete' => '1',
             'cantidadArticulos' => $this->faker->numberBetween(1, 20),
             'peso' => $this->faker->numberBetween(50, 150),
         ];
