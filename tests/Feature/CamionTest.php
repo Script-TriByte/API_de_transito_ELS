@@ -13,7 +13,7 @@ class CamionTest extends TestCase
     {
         $response = $this->get('/api/v3/contenidos/45000000', [
             "Accept" => "application/json"
-        ]);;
+        ]);
         $response->assertStatus(401);
     }
 
