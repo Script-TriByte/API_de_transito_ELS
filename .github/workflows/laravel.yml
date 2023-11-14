@@ -42,7 +42,5 @@ jobs:
       run: mysql -h 127.0.0.1 -u root -e "source tables.sql" scripttribyte
     - name: Correr seeders
       run: php artisan db:seed
-    - name: Crear carpeta Unit para testing
-      run: mkdir tests/Unit
     - name: Correr tests
       run: php artisan test
