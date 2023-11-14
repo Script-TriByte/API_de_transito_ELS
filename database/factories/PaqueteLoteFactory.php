@@ -4,6 +4,9 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+use App\Models\Paquete;
+use App\Models\PaqueteLote;
+
 class PaqueteLoteFactory extends Factory
 {
     /**
@@ -13,9 +16,17 @@ class PaqueteLoteFactory extends Factory
      */
     public function definition()
     {
+        $idPaquetes = Usuario::pluck('idPaquete')->toArray();
+
+        $idPaqueteRestantes = collect($idPaquetes)->filter(function ($idPaquete) {
+            return !PaqueteLote::where('idPaquete', $idPaquete)->exists();
+        })->toArray();
+
+        $idAAsignar = $idPaqueteRestantes[array_rand($idPaqueteRestantes)];
+
         return [
-            'idPaquete' => $this->faker->unique()->numberBetween(1, 15),
-            'idLote' => $this->faker->unique()->numberBetween(1, 15),
+            'idPaquete' => $idAAsignar,
+            'idLote' => $this->faker->numberBetween(1, 15),
         ];
     }
 }

@@ -4,6 +4,9 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+use App\Models\Usuario;
+use App\Models\Chofer;
+
 class ChoferFactory extends Factory
 {
     /**
@@ -13,8 +16,16 @@ class ChoferFactory extends Factory
      */
     public function definition()
     {
+        $docDeIdentidadDeUsuarios = Usuario::pluck('docDeIdentidad')->toArray();
+
+        $cedulasNoAsignadas = collect($docDeIdentidadDeUsuarios)->filter(function ($docDeIdentidad) {
+            return !Chofer::where('docDeIdentidad', $docDeIdentidad)->exists();
+        })->toArray();
+
+        $cedulaParaAsignar = $cedulasNoAsignadas[array_rand($cedulasNoAsignadas)];
+
         return [
-            'docDeIdentidad' => $this->faker->unique()->numberBetween(45000000, 45000015),
+            'docDeIdentidad' => $cedulaParaAsignar,
         ];
     }
 }

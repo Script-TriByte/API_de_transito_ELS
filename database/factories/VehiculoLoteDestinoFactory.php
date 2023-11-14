@@ -4,6 +4,9 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+use App\Models\Lote;
+use App\Models\VehiculoLoteDestino;
+
 class VehiculoLoteDestinoFactory extends Factory
 {
     /**
@@ -13,11 +16,27 @@ class VehiculoLoteDestinoFactory extends Factory
      */
     public function definition()
     {
+        $idLotes = Lote::pluck('idLote')->toArray();
+
+        $lotesSinEnviar = collect($idLotes)->filter(function ($idLote) {
+            return !VehiculoLoteDestino::where('idLote', $idLote)->exists();
+        })->toArray();
+
+        $idLotesRestantes = $lotesSinEnviar[array_rand($lotesSinEnviar)];
+
+        $docDeIdentidadDeUsuarios = Usuario::pluck('docDeIdentidad')->toArray();
+
+        $cedulasNoAsignadas = collect($docDeIdentidadDeUsuarios)->filter(function ($docDeIdentidad) {
+            return !VehiculoLoteDestino::where('docDeIdentidad', $docDeIdentidad)->exists();
+        })->toArray();
+
+        $cedulaParaAsignar = $cedulasNoAsignadas[array_rand($cedulasNoAsignadas)];
+
         return [
-            'idLote' =>  $this->faker->unique()->numberBetween(1, 15),
+            'idLote' => $idLotesRestantes,
             'fechaEstimada' => $this->faker->date(),
             'horaEstimada' => $this->faker->time(),
-            'docDeIdentidad' => $this->faker->unique()->numberBetween(45000000, 45000015),
+            'docDeIdentidad' => $cedulaParaAsignar,
         ];
     }
 }
