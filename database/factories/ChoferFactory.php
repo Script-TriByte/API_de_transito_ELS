@@ -16,18 +16,8 @@ class ChoferFactory extends Factory
      */
     public function definition()
     {
-        $docDeIdentidadDeUsuarios = Usuario::pluck('docDeIdentidad')->toArray();
-
-        $cedulasNoAsignadas = collect($docDeIdentidadDeUsuarios)->filter(function ($docDeIdentidad) {
-            return !Chofer::where('docDeIdentidad', $docDeIdentidad)->exists();
-        })->toArray();
-
-        $index = array_rand($cedulasNoAsignadas);
-        $cedulaParaAsignar = $cedulasNoAsignadas[$index];
-        unset($cedulasNoAsignadas[$index]); 
-
         return [
-            'docDeIdentidad' => $cedulaParaAsignar,
+            'docDeIdentidad' => '77777777',
         ];
     }
 }

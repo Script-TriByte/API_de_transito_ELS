@@ -16,17 +16,9 @@ class PaqueteLoteFactory extends Factory
      */
     public function definition()
     {
-        $idPaquetes = Usuario::pluck('idPaquete')->toArray();
-
-        $idPaqueteRestantes = collect($idPaquetes)->filter(function ($idPaquete) {
-            return !PaqueteLote::where('idPaquete', $idPaquete)->exists();
-        })->toArray();
-
-        $idAAsignar = $idPaqueteRestantes[array_rand($idPaqueteRestantes)];
-
         return [
-            'idPaquete' => $idAAsignar,
-            'idLote' => $this->faker->numberBetween(1, 15),
+            'idPaquete' => '1',
+            'idLote' => '1',
         ];
     }
 }

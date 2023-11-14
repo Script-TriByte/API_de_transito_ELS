@@ -16,27 +16,11 @@ class VehiculoLoteDestinoFactory extends Factory
      */
     public function definition()
     {
-        $idLotes = Lote::pluck('idLote')->toArray();
-
-        $lotesSinEnviar = collect($idLotes)->filter(function ($idLote) {
-            return !VehiculoLoteDestino::where('idLote', $idLote)->exists();
-        })->toArray();
-
-        $idLotesRestantes = $lotesSinEnviar[array_rand($lotesSinEnviar)];
-
-        $docDeIdentidadDeUsuarios = Usuario::pluck('docDeIdentidad')->toArray();
-
-        $cedulasNoAsignadas = collect($docDeIdentidadDeUsuarios)->filter(function ($docDeIdentidad) {
-            return !VehiculoLoteDestino::where('docDeIdentidad', $docDeIdentidad)->exists();
-        })->toArray();
-
-        $cedulaParaAsignar = $cedulasNoAsignadas[array_rand($cedulasNoAsignadas)];
-
         return [
-            'idLote' => $idLotesRestantes,
+            'idLote' => '1',
             'fechaEstimada' => $this->faker->date(),
             'horaEstimada' => $this->faker->time(),
-            'docDeIdentidad' => $cedulaParaAsignar,
+            'docDeIdentidad' => '77777777',
         ];
     }
 }
