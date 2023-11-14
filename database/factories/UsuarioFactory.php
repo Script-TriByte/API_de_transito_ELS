@@ -18,7 +18,7 @@ class UsuarioFactory extends Factory
             'nombre' => $this->faker->name(),
             'apellido' => $this->faker->lastname(),
             'telefono' => $this->faker->numberBetween(91000000, 97999999),
-            'direccion' => $this->faker->address(),
+            'direccion' => $this->substr($faker->address, 1, 40),
         ];
     }
 }
