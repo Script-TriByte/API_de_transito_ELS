@@ -30,7 +30,7 @@ Route::prefix('v2')->group(function ()
 
 Route::prefix('v3')->middleware("auth:api")->group(function ()
 {
-    Route::post("/entrega/{idLote}",
+    Route::post("/entrega/{idLote}/{documentoDeIdentidad}",
         [LoteController::class, "ConfirmarEntrega"]
     );
 
