@@ -64,7 +64,7 @@ class CamionController extends Controller
             return $lotes;
         }
         catch (ValidationException $e) {
-            return response($e->validator->errors(), 401);
+            return response($e->validator->errors(), 400);
         }
         catch (QueryException $e) {
             return [ "mensaje" => "No se ha podido conectar a la base de datos. Intentelo mas tarde." ];
