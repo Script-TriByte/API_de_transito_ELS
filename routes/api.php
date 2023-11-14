@@ -32,29 +32,29 @@ Route::prefix('v3')->group(function ()
 {
     Route::post("/entrega/{idLote}",
         [LoteController::class, "ConfirmarEntrega"]
-    )->middleware(Autenticacion::class);
+    )->middleware("auth:api");
 
     Route::get("/contenidos/{documentoDeIdentidad}",
         [CamionController::class, "IndicarLotes"]
-    )->middleware(Autenticacion::class);
+    )->middleware("auth:api");
 
     Route::get("/paquetes",
         [PaqueteController::class, "ListarTodos"]
-    )->middleware(Autenticacion::class);
+    )->middleware("auth:api");
 
     Route::get("/tiempo/{idPaquete}",
         [PaqueteController::class, "ObtenerHoraEstimadaDeLlegada"]
-    )->middleware(Autenticacion::class);
+    )->middleware("auth:api");
 
     Route::get("/destinos/{idPaquete}",
         [PaqueteController::class, "ObtenerDestinoAsignado"]
-    )->middleware(Autenticacion::class);
+    )->middleware("auth:api");
 
     Route::get("/lotes/{idPaquete}",
         [PaqueteController::class, "ObtenerInformacionDeLote"]
-    )->middleware(Autenticacion::class);
+    )->middleware("auth:api");
 
     Route::get("/articulos/{idPaquete}",
         [PaqueteController::class, "ObtenerInformacionDeArticulo"]
-    )->middleware(Autenticacion::class);
+    )->middleware("auth:api");
 });
