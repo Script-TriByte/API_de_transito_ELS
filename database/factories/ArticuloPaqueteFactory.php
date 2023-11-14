@@ -4,8 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\Paquete;
-
 class ArticuloPaqueteFactory extends Factory
 {
     /**
@@ -15,11 +13,9 @@ class ArticuloPaqueteFactory extends Factory
      */
     public function definition()
     {
-        $paquete = Paquete::findOrFail(1);
-
         return [
             'idArticulo' => '1',
-            'idPaquete' => $paquete->idPaquete,
+            'idPaquete' => '1',
         ];
     }
 }
