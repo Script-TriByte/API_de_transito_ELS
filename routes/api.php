@@ -28,33 +28,33 @@ Route::prefix('v2')->group(function ()
     );
 });
 
-Route::prefix('v3')->group(function ()
+Route::prefix('v3')->middleware("auth:api")->group(function ()
 {
     Route::post("/entrega/{idLote}",
         [LoteController::class, "ConfirmarEntrega"]
-    )->middleware("auth:api");
+    );
 
     Route::get("/contenidos/{documentoDeIdentidad}",
         [CamionController::class, "IndicarLotes"]
-    )->middleware("auth:api");
+    ); 
 
     Route::get("/paquetes",
         [PaqueteController::class, "ListarTodos"]
-    )->middleware("auth:api");
+    );
 
     Route::get("/tiempo/{idPaquete}",
         [PaqueteController::class, "ObtenerHoraEstimadaDeLlegada"]
-    )->middleware("auth:api");
+    );
 
     Route::get("/destinos/{idPaquete}",
         [PaqueteController::class, "ObtenerDestinoAsignado"]
-    )->middleware("auth:api");
+    );
 
     Route::get("/lotes/{idPaquete}",
         [PaqueteController::class, "ObtenerInformacionDeLote"]
-    )->middleware("auth:api");
+    );
 
     Route::get("/articulos/{idPaquete}",
         [PaqueteController::class, "ObtenerInformacionDeArticulo"]
-    )->middleware("auth:api");
+    );
 });
