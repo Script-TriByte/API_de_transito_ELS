@@ -22,7 +22,9 @@ class ChoferFactory extends Factory
             return !Chofer::where('docDeIdentidad', $docDeIdentidad)->exists();
         })->toArray();
 
-        $cedulaParaAsignar = $cedulasNoAsignadas[array_rand($cedulasNoAsignadas)];
+        $index = array_rand($cedulasNoAsignadas);
+        $cedulaParaAsignar = $cedulasNoAsignadas[$index];
+        unset($cedulasNoAsignadas[$index]); 
 
         return [
             'docDeIdentidad' => $cedulaParaAsignar,
