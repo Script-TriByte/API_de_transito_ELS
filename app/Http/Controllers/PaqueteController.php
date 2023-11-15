@@ -66,7 +66,7 @@ class PaqueteController extends Controller
     public function ObtenerHoraEstimadaDeLlegada(Request $request, $idPaquete)
     {
         try {
-            $informacionDeLote = $this->ObtenerInformacionDeLote();
+            $informacionDeLote = $this->ObtenerInformacionDeLote($idPaquete);
             $idLote = $informacionDeLote->idLote;
             $loteSiendoTransportado = VehiculoLoteDestino::findOfFail($idLote);
             $horaEstimadaDeLlegada = Carbon::parse($loteSiendoTransportado->horaEstimada);
