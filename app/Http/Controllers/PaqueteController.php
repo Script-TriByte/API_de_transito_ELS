@@ -67,7 +67,7 @@ class PaqueteController extends Controller
     {
         try {
             $informacionDeLote = $this->ObtenerInformacionDeLote($idPaquete);
-            
+
             if (!is_object($informacionDeLote))
                 throw new ModelNotFoundException();
 
@@ -91,7 +91,7 @@ class PaqueteController extends Controller
         try {
             $informacionDeLote = $this->ObtenerInformacionDeLote($idPaquete);
 
-            if (!is_object($informacionDeLote))
+            if (!($informacionDeLote instanceof \Illuminate\Database\Eloquent\Model))
                 throw new ModelNotFoundException();
 
             $idDestino = $informacionDeLote->idDestino;
