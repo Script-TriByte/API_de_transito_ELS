@@ -85,7 +85,7 @@ class PaqueteController extends Controller
     public function ObtenerDestinoAsignado(Request $request, $idPaquete)
     {
         try {
-            $informacionDeLote = $this->ObtenerInformacionDeLote();
+            $informacionDeLote = $this->ObtenerInformacionDeLote($idPaquete);
             $idDestino = $informacionDeLote->idDestino;
             $informacionDeDestino = Destino::findOrFail($idDestino);
 
