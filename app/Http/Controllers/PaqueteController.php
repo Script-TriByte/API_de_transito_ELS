@@ -67,6 +67,10 @@ class PaqueteController extends Controller
     {
         try {
             $informacionDeLote = $this->ObtenerInformacionDeLote($idPaquete);
+            
+            if (!is_object($informacionDeLote))
+                throw new ModelNotFoundException();
+
             $idLote = $informacionDeLote->idLote;
             $loteSiendoTransportado = VehiculoLoteDestino::findOrFail($idLote);
             $horaEstimadaDeLlegada = Carbon::parse($loteSiendoTransportado->horaEstimada);
@@ -87,7 +91,7 @@ class PaqueteController extends Controller
         try {
             $informacionDeLote = $this->ObtenerInformacionDeLote($idPaquete);
 
-            if ($informacionDeLote->getContent() === json_encode([ "mensaje" => "Paquete inexistente." ]))
+            if (!is_object($informacionDeLote))
                 throw new ModelNotFoundException();
 
             $idDestino = $informacionDeLote->idDestino;
