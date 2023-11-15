@@ -9,12 +9,11 @@ class PaqueteLote extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'idRelacion';
+    protected $primaryKey = 'idPaquete';
 
     protected $table = 'paquete_lote';
 
     protected $fillable = [
-        'idRelacion',
         'idPaquete',
         'idLote'
     ];
