@@ -60,7 +60,7 @@ class PaqueteController extends Controller
         $horaActual = Carbon::now();
         $diferenciaDeTiempo = $horaEstimadaDeLlegada->diffForHumans($horaActual);
 
-        return $diferenciaDeTiempo();
+        return $diferenciaDeTiempo;
     }
 
     public function ObtenerHoraEstimadaDeLlegada(Request $request, $idPaquete)
@@ -97,7 +97,7 @@ class PaqueteController extends Controller
             $idDestino = $informacionDeLote->idDestino;
             $informacionDeDestino = Destino::findOrFail($idDestino);
 
-            return $informacionDeDestino->nombre; 
+            return $informacionDeDestino; 
         }
         catch (ModelNotFoundException $e)
         {

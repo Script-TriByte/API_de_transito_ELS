@@ -52,7 +52,9 @@ class PaqueteTest extends TestCase
         $user = User::first();
         $response = $this->actingAs($user, "api")->get('/api/v3/destinos/1');
         $response->assertStatus(200);
-        $response->assertIsString();
+        
+        $destino = $response->decodeResponseJson();
+        $this->assertEquals(1, $destino['idDestino']);
     }
 
     public function test_ObtenerDestinoAsignadoDePaqueteInexistente()
