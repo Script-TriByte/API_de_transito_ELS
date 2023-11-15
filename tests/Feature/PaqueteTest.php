@@ -8,6 +8,7 @@ use Tests\TestCase;
 
 use App\Models\Lote;
 use App\Models\Articulo;
+use App\Models\User;
 
 class PaqueteTest extends TestCase
 {
