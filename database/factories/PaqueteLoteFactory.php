@@ -4,6 +4,9 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+use App\Models\Paquete;
+use App\Models\PaqueteLote;
+
 class PaqueteLoteFactory extends Factory
 {
     /**
@@ -14,8 +17,8 @@ class PaqueteLoteFactory extends Factory
     public function definition()
     {
         return [
-            'idPaquete' => $this->faker->unique()->numberBetween(1, 15),
-            'idLote' => $this->faker->unique()->numberBetween(1, 15),
+            'idPaquete' => '1',
+            'idLote' => '1',
         ];
     }
 }

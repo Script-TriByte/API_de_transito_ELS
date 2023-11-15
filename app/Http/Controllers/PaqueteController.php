@@ -60,15 +60,19 @@ class PaqueteController extends Controller
         $horaActual = Carbon::now();
         $diferenciaDeTiempo = $horaEstimadaDeLlegada->diffForHumans($horaActual);
 
-        return $diferenciaDeTiempo();
+        return $diferenciaDeTiempo;
     }
 
     public function ObtenerHoraEstimadaDeLlegada(Request $request, $idPaquete)
     {
         try {
-            $informacionDeLote = $this->ObtenerInformacionDeLote();
+            $informacionDeLote = $this->ObtenerInformacionDeLote($idPaquete);
+
+            if (!($informacionDeLote instanceof \Illuminate\Database\Eloquent\Model))
+                throw new ModelNotFoundException();
+
             $idLote = $informacionDeLote->idLote;
-            $loteSiendoTransportado = VehiculoLoteDestino::findOfFail($idLote);
+            $loteSiendoTransportado = VehiculoLoteDestino::findOrFail($idLote);
             $horaEstimadaDeLlegada = Carbon::parse($loteSiendoTransportado->horaEstimada);
 
             return $this->CalcularTiempoDeLlegada($horaEstimadaDeLlegada);
@@ -85,11 +89,15 @@ class PaqueteController extends Controller
     public function ObtenerDestinoAsignado(Request $request, $idPaquete)
     {
         try {
-            $informacionDeLote = $this->ObtenerInformacionDeLote();
+            $informacionDeLote = $this->ObtenerInformacionDeLote($idPaquete);
+
+            if (!($informacionDeLote instanceof \Illuminate\Database\Eloquent\Model))
+                throw new ModelNotFoundException();
+
             $idDestino = $informacionDeLote->idDestino;
             $informacionDeDestino = Destino::findOrFail($idDestino);
 
-            return $informacionDeDestino->nombre; 
+            return $informacionDeDestino; 
         }
         catch (ModelNotFoundException $e)
         {

@@ -15,8 +15,8 @@ class LoteFactory extends Factory
     {
         return [
             'cantidadPaquetes' => $this->faker->numberBetween(1, 5),
-            'idDestino' => $this->faker->numberBetween(1, 10),
-            'idAlmacen' => $this->faker->numberBetween(1, 10),
+            'idDestino' => '1',
+            'idAlmacen' => '1',
         ];
     }
 }

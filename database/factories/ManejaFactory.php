@@ -4,10 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\Usuario;
-use App\Models\Chofer;
-
-class ChoferFactory extends Factory
+class ManejaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,6 +15,7 @@ class ChoferFactory extends Factory
     {
         return [
             'docDeIdentidad' => '77777777',
+            'idVehiculo' => '1'
         ];
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
 
 use App\Models\VehiculoLoteDestino;
 
@@ -64,7 +66,7 @@ class CamionController extends Controller
             return $lotes;
         }
         catch (ValidationException $e) {
-            return response($e->validator->errors(), 401);
+            return response($e->validator->errors(), 400);
         }
         catch (QueryException $e) {
             return [ "mensaje" => "No se ha podido conectar a la base de datos. Intentelo mas tarde." ];

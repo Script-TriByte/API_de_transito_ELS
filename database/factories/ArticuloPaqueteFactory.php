@@ -14,8 +14,8 @@ class ArticuloPaqueteFactory extends Factory
     public function definition()
     {
         return [
-            'idArticulo' => $this->faker->unique()->numberBetween(1, 15),
-            'idPaquete' => $this->faker->unique()->numberBetween(1, 15),
+            'idArticulo' => '1',
+            'idPaquete' => '1',
         ];
     }
 }

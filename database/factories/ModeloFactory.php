@@ -4,10 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\Usuario;
-use App\Models\Chofer;
-
-class ChoferFactory extends Factory
+class ModeloFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +14,8 @@ class ChoferFactory extends Factory
     public function definition()
     {
         return [
-            'docDeIdentidad' => '77777777',
+            'nombre' => 'PlaceholderModelo',
+            'anio' => $this->faker->numberBetween(2000, 2023),
         ];
     }
 }

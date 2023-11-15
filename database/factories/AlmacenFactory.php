@@ -4,10 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Models\Usuario;
-use App\Models\Chofer;
-
-class ChoferFactory extends Factory
+class AlmacenFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +14,9 @@ class ChoferFactory extends Factory
     public function definition()
     {
         return [
-            'docDeIdentidad' => '77777777',
+            'capacidad' => $this->faker->numberBetween(500, 1000),
+            'direccion' => substr($this->faker->address(), 1, 40),
+            'idDepartamento' => $this->faker->numberBetween(1, 19),
         ];
     }
 }

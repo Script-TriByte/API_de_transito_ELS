@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
 
 use App\Models\Lote;
 use App\Models\EstadoEntrega;
+use App\Models\VehiculoLoteDestino;
 
 class LoteController extends Controller
 {

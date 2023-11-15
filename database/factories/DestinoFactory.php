@@ -14,7 +14,7 @@ class DestinoFactory extends Factory
     public function definition()
     {
         return [
-            'direccion' => $this->faker->address(),
+            'direccion' => substr($this->faker->address(), 1, 40),
             'idDepartamento' => $this->faker->numberBetween(1, 19),
         ];
     }

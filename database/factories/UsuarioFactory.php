@@ -14,11 +14,11 @@ class UsuarioFactory extends Factory
     public function definition()
     {
         return [
-            'docDeIdentidad' => $this->faker->unique()->numberBetween(45000000, 45000015),
+            'docDeIdentidad' => '77777777',
             'nombre' => $this->faker->name(),
             'apellido' => $this->faker->lastname(),
             'telefono' => $this->faker->numberBetween(91000000, 97999999),
-            'direccion' => $this->faker->address(),
+            'direccion' => substr($this->faker->address(), 1, 40),
         ];
     }
 }

@@ -4,6 +4,9 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+use App\Models\Lote;
+use App\Models\VehiculoLoteDestino;
+
 class VehiculoLoteDestinoFactory extends Factory
 {
     /**
@@ -14,10 +17,10 @@ class VehiculoLoteDestinoFactory extends Factory
     public function definition()
     {
         return [
-            'idLote' =>  $this->faker->unique()->numberBetween(1, 15),
+            'idLote' => '1',
             'fechaEstimada' => $this->faker->date(),
             'horaEstimada' => $this->faker->time(),
-            'docDeIdentidad' => $this->faker->unique()->numberBetween(45000000, 45000015),
+            'docDeIdentidad' => '77777777',
         ];
     }
 }
