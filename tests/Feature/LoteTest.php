@@ -11,10 +11,7 @@ class LoteTest extends TestCase
 {
     public function test_ConfirmarEntregaSinAutenticacion()
     {
-        $response = $this->post('api/v3/entrega/1/77777777', [
-            "Accept" => "application/json",
-            "Content-Type" => "application/json"
-        ]);
+        $response = $this->post('api/v3/entrega/1/77777777');
         $response->assertStatus(401);
     }
 
