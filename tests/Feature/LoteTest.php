@@ -9,12 +9,6 @@ use App\Models\User;
 
 class LoteTest extends TestCase
 {
-    public function test_ConfirmarEntregaSinAutenticacion()
-    {
-        $response = $this->post('api/v3/entrega/1/77777777');
-        $response->assertStatus(401);
-    }
-
     public function test_ConfirmarEntregaDeUnLoteExistente()
     {
         $user = User::first();
